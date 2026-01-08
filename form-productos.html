@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>CRUD Productos - Tienda Veterinaria SOL</title>
+  <style>
+    table { border-collapse: collapse; width: 80%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f4f4f4; }
+    button { margin-right: 5px; }
+  </style>
+</head>
+<body>
+
+  <h1>Registrar producto veterinario</h1>
+
+  <!-- FORMULARIO PARA CREAR / EDITAR -->
+  <form id="productoForm">
+    <input type="hidden" id="productoId">
+    <label>
+      Nombre del producto:
+      <input type="text" id="nombre" required>
+    </label>
+    <br><br>
+    <label>
+      Precio:
+      <input type="number" id="precio" required>
+    </label>
+    <br><br>
+    <button type="submit">Guardar producto</button>
+  </form>
+
+  <p id="mensaje"></p>
+
+  <!-- TABLA PARA MOSTRAR PRODUCTOS -->
+  <h2>Lista de productos</h2>
+  <table id="tablaProductos">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById('productoForm');
+    const mensaje = document.getElementById('mensaje');
+    const tablaBody = document.querySelector('#tablaProductos tbody');
+    const API_URL = 'http://localhost:3000/productos';
+
+    // --- FUNCION PARA CARGAR PRODUCTOS (GET) ---
+    async function cargarProductos() {
+      try {
+        const res = await fetch(API_URL);
+        const productos = await res.json();
+        tablaBody.innerHTML = '';
+        productos.forEach(p => {
+          const fila = document.createElement('tr');
+          fila.innerHTML = `
+            <td>${p.id}</td>
+            <td>${p.nombre}</td>
+            <td>${p.precio}</td>
+            <td>
+              <button onclick="editarProducto(${p.id}, '${p.nombre}', ${p.precio})">Editar</button>
+              <button onclick="eliminarProducto(${p.id})">Eliminar</button>
+            </td>
+          `;
+          tablaBody.appendChild(fila);
+        });
+      } catch (error) {
+        mensaje.textContent = 'Error al cargar productos';
+      }
+    }
+
+    // --- FUNCION PARA CREAR O ACTUALIZAR ---
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('productoId').value;
+      const producto = {
+        nombre: document.getElementById('nombre').value,
+        precio: Number(document.getElementById('precio').value)
+      };
+
+      try {
+        if (id) {
+          // ACTUALIZAR (PUT)
+          const res = await fetch(`${API_URL}/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(producto)
+          });
+          if (res.ok) mensaje.textContent = 'Producto actualizado correctamente 🐾';
+        } else {
+          // CREAR (POST)
+          const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(producto)
+          });
+          if (res.ok) mensaje.textContent = 'Producto guardado correctamente 🐾';
+        }
+      } catch (error) {
+        mensaje.textContent = 'Error al guardar producto';
+      }
+
+      form.reset();
+      document.getElementById('productoId').value = '';
+      cargarProductos();
+    });
+
+    // --- FUNCION PARA EDITAR ---
+    function editarProducto(id, nombre, precio) {
+      document.getElementById('productoId').value = id;
+      document.getElementById('nombre').value = nombre;
+      document.getElementById('precio').value = precio;
+      mensaje.textContent = 'Editando producto...';
+    }
+
+    // --- FUNCION PARA ELIMINAR ---
+    async function eliminarProducto(id) {
+      try {
+        const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          mensaje.textContent = 'Producto eliminado 🗑️';
+          cargarProductos();
+        }
+      } catch (error) {
+        mensaje.textContent = 'Error al eliminar producto';
+      }
+    }
+
+    // --- CARGAR PRODUCTOS AL INICIAR ---
+    cargarProductos();
+  </script>
+
+</body>
+</html>

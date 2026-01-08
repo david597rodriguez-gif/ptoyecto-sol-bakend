@@ -1,0 +1,79 @@
+1. INTRODUCCIÓN
+
+El presente documento describe el diseño y desarrollo de los servicios web (API REST) creados para el proyecto formativo “Tienda Veterinaria SOL”.  
+La API fue desarrollada utilizando Node.js y el framework Express, permitiendo la comunicación entre el frontend y el backend del sistema mediante el uso de solicitudes HTTP y el intercambio de información en formato JSON.
+
+Esta API corresponde al módulo de productos del software, el cual permite realizar operaciones básicas de consulta y registro de información.
+
+--------------------------------------------------
+
+2. TECNOLOGÍAS UTILIZADAS
+
+- Node.js
+- Express.js
+- API REST
+- JSON
+- Git y GitHub
+- Postman (para pruebas de los servicios)
+
+--------------------------------------------------
+
+3. DESCRIPCIÓN GENERAL DE LA API
+
+La API REST del módulo de productos permite gestionar la información relacionada con los productos de la tienda veterinaria.  
+Los servicios fueron diseñados siguiendo la arquitectura REST y utilizando métodos HTTP estándar.
+
+--------------------------------------------------
+
+4. SERVICIOS DISPONIBLES
+
+4.1 Servicio: Obtener lista de productos
+
+- Método HTTP: GET
+- Endpoint: /productos
+- Descripción:
+  Permite obtener el listado de productos disponibles en el sistema.
+- Respuesta:
+  Un objeto en formato JSON con la información de los productos.
+
+Ejemplo de respuesta:
+{
+  "mensaje": "Listado de productos"
+}
+
+--------------------------------------------------
+
+4.2 Servicio: Registrar un producto
+
+- Método HTTP: POST
+- Endpoint: /productos
+- Descripción:
+  Permite registrar un nuevo producto en el sistema enviando la información mediante el cuerpo de la solicitud.
+- Datos de entrada (JSON):
+  Nombre del producto, precio y descripción.
+- Respuesta:
+  Confirmación del registro del producto en formato JSON.
+
+Ejemplo de respuesta:
+{
+  "mensaje": "Producto registrado correctamente"
+}
+
+--------------------------------------------------
+
+5. PRUEBAS DE LOS SERVICIOS
+
+Los servicios desarrollados fueron probados utilizando la herramienta Postman, verificando el correcto funcionamiento de los métodos GET y POST y la correcta respuesta del servidor ante las solicitudes realizadas.
+
+--------------------------------------------------
+
+6. VERSIONAMIENTO DEL PROYECTO
+
+El proyecto fue gestionado mediante un sistema de control de versiones utilizando Git.  
+Se creó un repositorio en GitHub donde se almacenó el código fuente del backend, permitiendo el control de cambios y la gestión del proyecto.
+
+--------------------------------------------------
+
+7. CONCLUSIÓN
+
+Con el desarrollo de esta API REST se cumple con los requerimientos de la evidencia GA7-220501096-AA5-EV03, implementando servicios web funcionales, documentados y versionados, alineados con las características del proyecto formativo “Tienda Veterinaria SOL”.
